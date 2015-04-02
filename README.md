@@ -16,5 +16,7 @@ Class EmpiricDecider evaluates provided options Map<T, Double> optionsWithOdds w
 ```
 Map<String,Double> options = /* init the map, for example Option1:1.5;Option2:3.0 */
 String selectedOption = EmpiricDecider.getSuccessfulOption(options);
-/* the generated chance - for example 0.3 - is modified accorging to the odds to value 1.35 and afterwards it is compared to the odds of the options. There is 33,333% chance that the first option is returned, else the second will.  */
+/* the generated chance - for example 0.3 - is modified accorging to the odds to value 1.35 */
+/* afterwards it is compared to the odds of the options */
+/* there is 33,333% chance that the first option is returned, else the second will  */
 ```
