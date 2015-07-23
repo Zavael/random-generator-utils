@@ -1,10 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2014 Andrej Badinka
  */
+
 package sk.badand.text;
 
+import sk.badand.math.OddsDecider;
 import sk.badand.math.Randomizer;
 
 /**
@@ -36,8 +36,10 @@ public class RandomStringGenerator {
 
         if (includeLower) {
             bucket.append(charsLow);
+            bucket.append(charsLow);
         }
         if (includeUpper) {
+            bucket.append(charsUpp);
             bucket.append(charsUpp);
         }
         if (includeNumbers) {
@@ -60,21 +62,33 @@ public class RandomStringGenerator {
     }
 
     public String generateDesignation(int maxCount) {
-        return generateString(false, true, false, false, false, 1, 1) + generateString(true, false, true, false, false, 3, maxCount);
+        return generateString(false, true, false, false, false, 1, 1) + generateString(true, false, true, false, false, 3, maxCount - 1);
+    }
+    
+    public String generateWord(int maxCount) {
+        return generateString(true, false, true, false, false, 2, maxCount);
     }
     
     public String generateText(int wordCount) {
-        return "To be done";//TODO finish
+        StringBuilder text = new StringBuilder(generateDesignation(10));
+        for (int i = 0; i < wordCount; i++) {
+            if (OddsDecider.decideSuccess(0.1)) {
+                text.append(". ").append(generateDesignation(10));
+            } else {
+                text.append(" ").append(generateWord(10));
+            }
+        }
+        return text.append(".").toString();
     }
     
 
     public static void main(String[] args) {
         RandomStringGenerator randomStringGenerator = new RandomStringGenerator();
-        System.out.println("5:" + randomStringGenerator.generateDesignation(5));
-        System.out.println("15:" + randomStringGenerator.generateDesignation(15));
-        System.out.println("25:" + randomStringGenerator.generateDesignation(25));
-
-        System.out.println("3-10 full:" + randomStringGenerator.generateString(true, true, true, true, true, 3, 10));
-        System.out.println("7-1 full:" + randomStringGenerator.generateString(true, true, true, true, true, 7, 1));
+        System.out.println("word: " + randomStringGenerator.generateWord(10));
+        System.out.println("word: " + randomStringGenerator.generateWord(10));
+        System.out.println("word: " + randomStringGenerator.generateWord(10));
+        
+        System.out.println("text: " + randomStringGenerator.generateText(20));
+        System.out.println("text: " + randomStringGenerator.generateText(20));
     }
 }
