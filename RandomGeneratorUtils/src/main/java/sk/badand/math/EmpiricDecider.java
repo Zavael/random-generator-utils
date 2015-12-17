@@ -10,18 +10,26 @@ import java.util.Map;
 /**
  *
  * @author abadinka
+ * @param <V>
  */
-public class EmpiricDecider {
+public class EmpiricDecider<V extends Object>{
+    private final Randomizer randomizer = new Randomizer();
     
-    public static <T> T getSuccessfulOption(Map<T, Double> optionsWithOdds, double chance){        
+    private final Map<V, Double> optionsWithOdds;
+
+    public EmpiricDecider(Map<V, Double> optionsWithOdds) {
+        this.optionsWithOdds = optionsWithOdds;
+    }
+    
+    public V getSuccessfulOption(double chance){        
         double totalOdds = 0;
-        LinkedHashMap<T, Double> optionRanges = new LinkedHashMap<>(optionsWithOdds.size());
-        for (T option : optionsWithOdds.keySet()) {
+        LinkedHashMap<V, Double> optionRanges = new LinkedHashMap<>(optionsWithOdds.size());
+        for (V option : optionsWithOdds.keySet()) {
             totalOdds += optionsWithOdds.get(option);
             optionRanges.put(option, totalOdds);
         }
         double realChance = chance * totalOdds;
-        for (T option : optionRanges.keySet()) {
+        for (V option : optionRanges.keySet()) {
             if (realChance < optionRanges.get(option)) {
                 return option;
             }
@@ -30,7 +38,7 @@ public class EmpiricDecider {
         throw new IllegalArgumentException("Argument 'chance' is out of universe 1.0");
     }
     
-    public static <T> T getSuccessfulOption(Map<T, Double> optionsWithOdds){
-        return getSuccessfulOption(optionsWithOdds, Randomizer.nextDouble());
+    public V getSuccessfulOption(){
+        return getSuccessfulOption(randomizer.nextDouble());
     }
 }
